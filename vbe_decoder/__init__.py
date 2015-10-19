@@ -224,7 +224,7 @@ class Decoder(object):
         # if not self.in_buf or self.in_buf[self.i] == 0x00:
         if not self.in_buf or self.i == len(self.in_buf):
             log.debug('Evaluating in_buf conditions')
-            if self.buf_ptr > len(self.buf):
+            if self.buf_ptr >= len(self.buf):
                 log.debug('End of input buf')
                 if self.len:
                     log.error('Premature end of buf')
@@ -234,8 +234,9 @@ class Decoder(object):
             else:
                 # Populate self.in_buf by c.LEN_OUTBUF chars
                 self.in_buf = self.buf[self.buf_ptr: self.buf_ptr + c.LEN_INBUF]
-                log.debug('Updating in_buf - populated {} characters'.format(len(self.in_buf)))
-                self.buf_ptr = self.buf_ptr + c.LEN_INBUF
+                l = len(self.in_buf)
+                log.debug('Updating in_buf - populated {} characters'.format(l))
+                self.buf_ptr += l
                 self.i = 0
                 return c.PROLOG_CONTINUE
         # Update output buffer
@@ -389,12 +390,10 @@ class Decoder(object):
                 encoding_index = self.m % 64
                 encoding_index2 = c.PICK_ENCODING[encoding_index]
                 _c = self.transform_map[encoding_index2].get(ord(self.in_buf[self.i]))
-                # XXX
-                # log.debug(_c)
                 self.out_buf += chr(_c)
                 self.csum += _c
                 self.m += 1
-
+                self.j += 1
             else:
                 if not self.codepage and ((ord(self.in_buf[self.i]) & 0x80) == 0x80):
                     # UTF-8 but not a start byte
