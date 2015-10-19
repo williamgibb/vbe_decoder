@@ -1,4 +1,3 @@
-# XXX Fill out docstring!
 """
 __init__.py from vbe_decoder
 Created: 10/10/15
