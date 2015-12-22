@@ -336,7 +336,8 @@ class Decoder(object):
         self.i += 1
         self.ml -= 1
         if not self.ml:
-            self.csum = utility.decode_base64(chars=self.csbuf, digits=self.digits)
+            calculated_csum = utility.decode_base64(chars=self.csbuf, digits=self.digits)
+            self.csum -= calculated_csum
             if self.csum:
                 log.error('Incorrect checksum: {}'.format(self.csum))
                 # XXX
@@ -363,6 +364,10 @@ class Decoder(object):
         # log.debug('state_unescape')
         _c = utility.unescape(self.in_buf[self.i])
         self.out_buf += _c
+        # XXX
+        # XXX This may have been the fix for hte broken csum calculation!
+        # XXX
+        self.csum = self.csum + ord(_c)
         self.j += 1
         self.i += 1
 
