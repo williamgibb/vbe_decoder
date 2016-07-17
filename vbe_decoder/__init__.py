@@ -210,10 +210,10 @@ class Decoder(object):
             if not func:
                 raise exc.InternalError('Illegal state found: {}'.format(self.state))
             func()
-        log.info('Out of while loop')
+        log.debug('Out of while loop')
         # flush out the out_buf to output_buf
-        log.info(self.j)
-        log.info(len(self.out_buf))
+        log.debug(self)
+        log.debug("Flushing {} characters".format(len(self.out_buf)))
         self.output_buf += self.out_buf
 
     def loop_prolog(self):
