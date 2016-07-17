@@ -137,14 +137,21 @@ unsigned long int decodeBase64 (unsigned char *p)
 {
 	unsigned long int val = 0;
 
+	//printf("b64 p: %.6s\n", p);
 	val +=  (digits[p[0]] << 2);
+	//printf("%lu\n", val);
 	val +=  (digits[p[1]] >> 4);
 	val +=  (digits[p[1]] & 0xf) << 12;
+	//printf("%lu\n", val);
 	val += ((digits[p[2]] >> 2) << 8);
 	val += ((digits[p[2]] & 0x3) << 22);
+	//printf("%lu\n", val);
 	val +=  (digits[p[3]] << 16);
+	//printf("%lu\n", val);
 	val += ((digits[p[4]] << 2) << 24);
+	//printf("%lu\n", val);
 	val += ((digits[p[5]] >> 4) << 24);
+	//printf("%lu\n", val);
 
 	/* 543210 543210 543210 543210 543210 543210
 
@@ -411,7 +418,13 @@ int ScriptDecoder (unsigned char *inname, unsigned char *outname, unsigned int c
 					if ((inbuf[i] & 0x80) == 0)
 					{
 						outbuf[j++] = c = transformed[pick_encoding[m%64]][inbuf[i]];
+						/*
+						// Equivalent statement of the above line
+						c = transformed[pick_encoding[m%64]][inbuf[i]];
+						outbuf[j++] = c;
+						*/
 						csum += c;
+						//printf("csum c: 0x%lx; csum: 0x%lx\n", c, csum);
 						m++;
 					}
 					else
@@ -438,6 +451,11 @@ int ScriptDecoder (unsigned char *inname, unsigned char *outname, unsigned int c
 
 			case STATE_UNESCAPE:
 				outbuf[j++] = c = unescape (inbuf[i++]);
+				/*
+				// Equivalent statement of the above line
+				c = unescape (inbuf[i++]);
+				outbuf[j++] = c;
+				*/
 				csum += c;
 				len--;
 				m++;
@@ -448,7 +466,10 @@ int ScriptDecoder (unsigned char *inname, unsigned char *outname, unsigned int c
 				csbuf[6-ml] = inbuf[i++];
 				if (!(--ml))
 				{
+					printf("csbuf: %.6s\n", csbuf);
+					printf("csum: %d\n", csum);
 					csum -= decodeBase64 (csbuf);
+					printf("check csum: %d\n", csum);
 					if (csum)
 					{
 						printf ("Error: Incorrect checksum! (%lu)\n", csum);
@@ -523,7 +544,8 @@ int ScriptDecoder (unsigned char *inname, unsigned char *outname, unsigned int c
 				break;
 		}
 	}
-
+	//printf("state: %d\n", state);
+	//printf("j: %d\n", j);
 	fwrite (outbuf, sizeof (char), j, outfile);
 	fclose (infile);
 	fclose (outfile);
