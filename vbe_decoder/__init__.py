@@ -69,11 +69,10 @@ import logging
 from . import constants as c
 from . import utility
 from . import exc
+
 log = logging.getLogger(__name__)
 __author__ = 'wgibb'
 __version__ = '0.0.1'
-
-
 
 
 class Decoder(object):
@@ -217,7 +216,6 @@ class Decoder(object):
         log.info(len(self.out_buf))
         self.output_buf += self.out_buf
 
-
     def loop_prolog(self):
         # log.debug('Loop prolog')
         # Update input buffer
@@ -287,7 +285,7 @@ class Decoder(object):
             # ';' means we are at the end of the mnemonic
             c1 = utility.decode_mnemonic(self.htmldec)
             # Copy the decoded character back into the input buffer
-            self.in_buf = self.in_buf[:self.i] + c1 + self.in_buf[self.i+1:]
+            self.in_buf = self.in_buf[:self.i] + c1 + self.in_buf[self.i + 1:]
             self.html_encoded = 2
             self.state = self.ustate
 
@@ -300,7 +298,7 @@ class Decoder(object):
             self.c2 -= 0x20
         c2 = chr(self.c2 + (self.c << 4))
         # Copy the decoded character back into the input buffer
-        self.in_buf = self.in_buf[:self.i] + c2 + self.in_buf[self.i+1:]
+        self.in_buf = self.in_buf[:self.i] + c2 + self.in_buf[self.i + 1:]
         # avoid looping in case this was an %
         self.url_encoded = 2
         # Restore old state
@@ -323,7 +321,7 @@ class Decoder(object):
         self.ml -= 1
         if not self.ml:
             self.len = utility.decode_base64(chars=self.len_buf,
-                                     digits=self.digits)
+                                             digits=self.digits)
             log.debug('Found encoded block containing {} characters'.format(self.len))
             self.m = 0
             self.ml = 2
@@ -364,10 +362,7 @@ class Decoder(object):
         # log.debug('state_unescape')
         _c = utility.unescape(self.in_buf[self.i])
         self.out_buf += _c
-        # XXX
-        # XXX This may have been the fix for hte broken csum calculation!
-        # XXX
-        self.csum = self.csum + ord(_c)
+        self.csum += ord(_c)
         self.j += 1
         self.i += 1
 
@@ -397,6 +392,7 @@ class Decoder(object):
                 _c = self.transform_map[encoding_index2].get(ord(self.in_buf[self.i]))
                 self.out_buf += chr(_c)
                 self.csum += _c
+                # print("csum c: 0x{:x}; csum: 0x{:x}".format(_c, self.csum))
                 self.m += 1
                 self.j += 1
             else:
@@ -469,4 +465,3 @@ class Decoder(object):
         self.ml = len(c.MARKER)
         self.m = 0
         self.state = c.STATE_COPY_INPUT
-
