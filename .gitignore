@@ -61,5 +61,4 @@ target/
 # Created by .ignore support plugin (hsz.mobi)
 
 a.out
-*.txt
 .python-version
