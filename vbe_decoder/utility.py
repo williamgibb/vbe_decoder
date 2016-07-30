@@ -8,10 +8,11 @@ Purpose: Utility functions used by vbe_decoder
 from __future__ import print_function
 import logging
 # Custom Code
-from . import exc
-from . import constants as c
+from vbe_decoder import exc
+from vbe_decoder import constants as c
+
 log = logging.getLogger(__name__)
-__author__ = 'wgibb'
+
 
 def make_digits():
     digits = {0x2b: 62,
@@ -26,7 +27,7 @@ def make_digits():
 
 def decode_mnemonic(mnemonic):
     ret = c.ENTITY_MAP.get(mnemonic)
-    if ret == None:
+    if ret is None:
         return "?"
     return chr(ret)
 
@@ -83,7 +84,7 @@ def decode_base64(chars, digits):
             d = (v >> 4) << 24
             # log.debug("0x{:x}".format(d))
             ret += d
-        # log.debug('val: {:x}'.format(ret))
+            # log.debug('val: {:x}'.format(ret))
     return ret
 
 
@@ -134,7 +135,7 @@ def make_trans():
     for i in range(31, 128):
         for j in range(3):
             indx = (i - 31) * 3 + j
-            #log.info("{}, {}, {}".format(i, j, indx))
+            # log.info("{}, {}, {}".format(i, j, indx))
             rdi = c.RAW_DATA[indx]
             v = i
             if i == 31:

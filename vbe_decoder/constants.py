@@ -4,7 +4,6 @@ Created: 10/18/15
 
 Purpose: Constants used by vbe_decoder
 """
-__author__ = 'wgibb'
 
 STATE_INIT_COPY = 100
 STATE_COPY_INPUT = 101
