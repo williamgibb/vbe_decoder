@@ -31,8 +31,10 @@ class TestDecoder(unittest.TestCase):
         self.decoder = vbe_decoder.decoder.Decoder()
 
     def run_decoder(self, input_buf_fp, expected_buf_fp):
-        inbuf = open(input_buf_fp, 'rb').read()
-        outbuf = open(expected_buf_fp, 'rb').read()
+        with open(input_buf_fp, 'rb') as f:
+            inbuf = f.read()
+        with open(expected_buf_fp, 'rb') as f:
+            outbuf = f.read()
         self.decoder.decode(inbuf)
         decoded_buf = self.decoder.output_buf
         self.assertEqual(outbuf, decoded_buf)
