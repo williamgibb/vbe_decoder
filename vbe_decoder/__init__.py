@@ -66,7 +66,10 @@ from __future__ import print_function
 import logging
 # Third Party code
 # Custom Code
-
-log = logging.getLogger(__name__)
+from vbe_decoder.decoder import Decoder
+from vbe_decoder.exc import DecodeError, InternalError
+__all__ = ['Decoder', 'DecodeError', 'InternalError']
 __author__ = 'william.gibb'
 __version__ = '0.1.0'
+
+log = logging.getLogger(__name__)
