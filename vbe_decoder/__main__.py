@@ -15,7 +15,6 @@ import sys
 # Custom Code
 import vbe_decoder
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s [%(filename)s:%(funcName)s]')
 log = logging.getLogger(__name__)
 
 __author__ = 'wgibb'
@@ -58,8 +57,12 @@ Any other code pages don't need to be specified.'''
                         help='Enable verbose output')
     return parser
 
-
-if __name__ == '__main__':
+def _main():
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s [%(filename)s:%(funcName)s]')
     p = makeargpaser()
     opts = p.parse_args()
     main(opts)
+
+
+if __name__ == '__main__':
+    _main()
