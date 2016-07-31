@@ -1,13 +1,4 @@
-import setuptools.command.test
-from setuptools import find_packages, setup
-
-
-# http://stackoverflow.com/questions/17001010/how-to-run-unittest-discover-from-python-setup-py-test
-# http://stackoverflow.com/a/23443087
-class TestCommand(setuptools.command.test.test):
-    """ Setuptools test command explicitly using test discovery. """
-    def _test_args(self):
-        yield 'discover'
+from setuptools import setup
 
 
 version = __import__('vbe_decoder').__version__
@@ -39,8 +30,5 @@ setup(
         'Topic :: Security',
         'Topic :: System :: Recovery Tools',
     ],
-    zip_safe=True,
-    cmdclass={
-        'test': TestCommand,
-    },
+    zip_safe=True
 )
