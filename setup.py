@@ -39,6 +39,7 @@ setup(
         'Topic :: Security',
         'Topic :: System :: Recovery Tools',
     ],
+    zip_safe=True,
     cmdclass={
         'test': TestCommand,
     },
