@@ -336,7 +336,7 @@ class Decoder(object):
                 _c = self.transform_map[encoding_index2].get(ord(self.in_buf[self.i]))
                 self.out_buf += chr(_c)
                 self.csum += _c
-                # print("csum c: 0x{:x}; csum: 0x{:x}".format(_c, self.csum))
+                # log.debug("csum c: 0x{:x}; csum: 0x{:x}".format(_c, self.csum))
                 self.m += 1
                 self.j += 1
             else:
