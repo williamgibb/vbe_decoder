@@ -28,10 +28,10 @@ def main(options):
                             url_encoded=options.urldec,
                             html_encoded=options.htmldec)
     with open(options.input, 'rb') as f:
-        buf = f.read()
+        buf = f.read().decode()
     d.decode(buf=buf)
     with open(options.output, 'wb') as f:
-        f.write(d.output_buf)
+        f.write(d.output_buf.encode())
     sys.exit(0)
 
 

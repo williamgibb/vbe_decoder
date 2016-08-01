@@ -32,9 +32,22 @@ class TestDecoder(unittest.TestCase):
 
     def run_decoder(self, input_buf_fp, expected_buf_fp):
         with open(input_buf_fp, 'rb') as f:
-            inbuf = f.read()
+            inbuf = f.read().decode()
         with open(expected_buf_fp, 'rb') as f:
-            outbuf = f.read()
+            outbuf = f.read().decode()
+        self.decoder.decode(inbuf)
+        decoded_buf = self.decoder.output_buf
+        self.assertEqual(outbuf, decoded_buf)
+
+    def test_bytearray_input(self):
+        log.info('Running contrato test w/ bytearray input')
+        infp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware')
+        opfp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware.decoded')
+        with open(infp, 'rb') as f:
+            inbuf = f.read()
+        with open(opfp, 'rb') as f:
+            outbuf = f.read().decode()
+        self.assertIsInstance(inbuf, bytes)
         self.decoder.decode(inbuf)
         decoded_buf = self.decoder.output_buf
         self.assertEqual(outbuf, decoded_buf)

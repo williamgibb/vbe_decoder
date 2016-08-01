@@ -127,9 +127,12 @@ class Decoder(object):
     def decode(self, buf):
         """
 
-        :param buf:
+        :param buf: String or bytes representing a VBE script.
         :return:
         """
+        if not isinstance(buf, str):
+            log.debug('Decoding buf')
+            buf = buf.decode()
         self.reset()
         self.buf = buf
         while self.state:
