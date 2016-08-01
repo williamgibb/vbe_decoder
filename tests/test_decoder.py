@@ -58,6 +58,16 @@ class TestDecoder(unittest.TestCase):
         opfp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware.decoded')
         self.run_decoder(input_buf_fp=infp, expected_buf_fp=opfp)
 
+    def test_class_resuse(self):
+        log.info('Running contrato test with class reuse / reset()')
+        infp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware')
+        opfp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware.decoded')
+        self.run_decoder(input_buf_fp=infp, expected_buf_fp=opfp)
+        obuf1 = self.decoder.output_buf
+        self.decoder.reset()
+        self.run_decoder(input_buf_fp=infp, expected_buf_fp=opfp)
+        self.assertEqual(self.decoder.output_buf, obuf1)
+
     def test_bad_input(self):
         log.info('Running test with bad input')
         with self.assertRaises(vbe_decoder.DecodeError):
