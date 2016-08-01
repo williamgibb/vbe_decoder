@@ -1,10 +1,12 @@
 from setuptools import setup
+
 try:
     import pypandoc
     long_description = pypandoc.convert('README.md', 'rst')
 except ImportError:
     long_description = open('README.md').read()
-
+except FileNotFoundError:
+    long_description = 'README.md not found.'
 
 version = __import__('vbe_decoder').__version__
 
@@ -14,7 +16,7 @@ setup(
     url='http://www.github.com/williamgibb/vbe_decoder/',
     author='William Gibb',
     author_email='williamgibb@gmail.com',
-    description=('Encoded Visual Basic script decoder'),
+    description='Encoded Visual Basic script decoder',
     long_description=long_description,
     license='MIT',
     packages=['vbe_decoder',
