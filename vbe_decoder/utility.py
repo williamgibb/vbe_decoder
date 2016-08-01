@@ -33,14 +33,9 @@ def decode_mnemonic(mnemonic):
 
 
 def unescape(char):
-    escape_map = {'#': '\r',
-                  '&': '\n',
-                  '!': '<',
-                  '*': '>',
-                  '$': '@'}
     if ord(char) > 127:
         return char
-    for escape, escaped in escape_map.items():
+    for escape, escaped in c.ESCAPE_MAP.items():
         if escape == char:
             return escaped
     return '?'

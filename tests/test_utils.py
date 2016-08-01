@@ -13,6 +13,7 @@ Usage:
 # Stdlib
 from __future__ import print_function
 import logging
+import string
 import unittest
 # Third Party code
 # Custom Code
@@ -283,6 +284,14 @@ class TestMnemonic(unittest.TestCase):
         for k, v in constants.ENTITY_MAP.items():
             e = chr(v)
             r = utils.decode_mnemonic(mnemonic=k)
+            self.assertEqual(r, e)
+
+
+class TestEscape(unittest.TestCase):
+    def test_escape(self):
+        for char in string.printable:
+            e = constants.ESCAPE_MAP.get(char, '?')
+            r = utils.unescape(char=char)
             self.assertEqual(r, e)
 
 
