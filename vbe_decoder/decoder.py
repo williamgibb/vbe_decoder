@@ -164,7 +164,6 @@ class Decoder(object):
     def loop_prolog(self):
         # log.debug('Loop prolog')
         # Update input buffer
-        # if not self.in_buf or self.in_buf[self.i] == 0x00:
         if not self.in_buf or self.i == len(self.in_buf):
             # log.debug('Evaluating in_buf conditions')
             if self.buf_ptr >= len(self.buf):
