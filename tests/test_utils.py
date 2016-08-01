@@ -300,5 +300,16 @@ class TestEscape(unittest.TestCase):
         self.assertEqual(r, e)
 
 
+class TestTransform(unittest.TestCase):
+    def test_transform(self):
+        r = utils.make_trans()
+        # Spot check things
+        self.assertEqual(len(r), 3)
+        self.assertEqual(r[0][0], 0)
+        self.assertEqual(r[0][9], 123)
+        self.assertEqual(r[1][9], 87)
+        self.assertEqual(r[2][127], 101)
+
+
 if __name__ == '__main__':
     unittest.main()
