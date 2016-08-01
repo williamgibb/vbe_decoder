@@ -17,8 +17,10 @@ import string
 import unittest
 # Third Party code
 # Custom Code
-import vbe_decoder.utility as utils
+import vbe_decoder.exc as exc
 import vbe_decoder.constants as constants
+import vbe_decoder.utility as utils
+
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s [%(filename)s:%(funcName)s]')
 log = logging.getLogger(__name__)
@@ -162,6 +164,10 @@ class TestDigits(unittest.TestCase):
 class TestBase64(unittest.TestCase):
     def setUp(self):
         self.digits = utils.make_digits()
+
+    def test_bad_data(self):
+        with self.assertRaises(exc.InternalError):
+            utils.decode_base64(chars='12345', digits=self.digits)
 
     def test_b64_decode1(self):
         s = 'abcdef'
