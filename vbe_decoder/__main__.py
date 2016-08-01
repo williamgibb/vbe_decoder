@@ -29,7 +29,9 @@ def main(options):
                             html_encoded=options.htmldec)
     with open(options.input, 'rb') as f:
         buf = f.read().decode()
+    log.info('Decoding data from {}'.format(options.input))
     d.decode(buf=buf)
+    log.info('Decoded data - writing to {}'.format(options.output))
     with open(options.output, 'wb') as f:
         f.write(d.output_buf.encode())
     sys.exit(0)
