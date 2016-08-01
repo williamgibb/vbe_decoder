@@ -131,7 +131,7 @@ class Decoder(object):
         :return:
         """
         if not isinstance(buf, str):
-            log.debug('Decoding buf')
+            # log.debug('Decoding buf')
             try:
                 buf = buf.decode()
             except AttributeError as e:
@@ -155,10 +155,10 @@ class Decoder(object):
             if not func:
                 raise exc.InternalError('Illegal state found: {}'.format(self.state))
             func()
-        log.debug('Out of while loop')
+        # log.debug('Out of while loop')
         # flush out the out_buf to output_buf
-        log.debug(self)
-        log.debug("Flushing {} characters".format(len(self.out_buf)))
+        # log.debug(self)
+        # log.debug("Flushing {} characters".format(len(self.out_buf)))
         self.output_buf += self.out_buf
 
     def loop_prolog(self):
@@ -166,9 +166,9 @@ class Decoder(object):
         # Update input buffer
         # if not self.in_buf or self.in_buf[self.i] == 0x00:
         if not self.in_buf or self.i == len(self.in_buf):
-            log.debug('Evaluating in_buf conditions')
+            # log.debug('Evaluating in_buf conditions')
             if self.buf_ptr >= len(self.buf):
-                log.debug('End of input buf')
+                # log.debug('End of input buf')
                 if self.len:
                     log.error('Premature end of buf')
                     if self.utf8 > 0:
@@ -178,20 +178,20 @@ class Decoder(object):
                 # Populate self.in_buf by c.LEN_OUTBUF chars
                 self.in_buf = self.buf[self.buf_ptr: self.buf_ptr + c.LEN_INBUF]
                 l = len(self.in_buf)
-                log.debug('Updating in_buf - populated {} characters'.format(l))
+                # log.debug('Updating in_buf - populated {} characters'.format(l))
                 self.buf_ptr += l
                 self.i = 0
                 return c.PROLOG_CONTINUE
         # Update output buffer
         if self.j == c.LEN_OUTBUF:
-            log.debug('Updating out_buf')
+            # log.debug('Updating out_buf')
             self.output_buf += self.out_buf
             # Reset the out_buf to be empty
             self.out_buf = ''
             self.j = 0
         # Handle urlencoded states
         if self.url_encoded == 1 and self.in_buf[self.i] == '%':
-            log.debug('Saving urlencoding state')
+            # log.debug('Saving urlencoding state')
             self.ustate = self.state
             self.state = c.STATE_URLENCODE_1
             self.i += 1
@@ -199,11 +199,11 @@ class Decoder(object):
         # 2 means we do urldecoding but wanted to avoid decoding an
         # already decoded % for the second time
         if self.url_encoded == 2:
-            log.debug('self.url_encoded 2->1')
+            # log.debug('self.url_encoded 2->1')
             self.url_encoded = 1
         # Handle htmlencoded states
         if self.html_encoded == 1 and self.in_buf[self.i] == '%':
-            log.debug('Saving htmlencoding state')
+            # log.debug('Saving htmlencoding state')
             self.ustate = self.state
             self.state = c.STATE_HTMLENCODE
             self.hd = 0
@@ -212,12 +212,12 @@ class Decoder(object):
         # 2 means we do htmldecoding but wanted to avoid decoding an
         # already decoded % for the second time
         if self.html_encoded == 2:
-            log.debug('self.html_encoded 2->1')
+            # log.debug('self.html_encoded 2->1')
             self.html_encoded = 1
         return c.PROLOG_NO_ACTION
 
     def state_htmlencode(self):
-        log.debug('state_htmlencode')
+        # log.debug('state_htmlencode')
         self.c1 = self.in_buf[self.i]
         if self.c1 != ';':
             self.i += 1
@@ -235,7 +235,7 @@ class Decoder(object):
             self.state = self.ustate
 
     def state_urlencode_2(self):
-        log.debug('state_urlencode_2')
+        # log.debug('state_urlencode_2')
         self.c2 = ord(self.in_buf[self.i]) - 0x30
         if self.c2 > 0x9:
             self.c2 -= 0x7
@@ -250,7 +250,7 @@ class Decoder(object):
         self.state = self.ustate
 
     def state_urlencode_1(self):
-        log.debug('state_urlencode_1')
+        # log.debug('state_urlencode_1')
         self.c1 = ord(self.in_buf[self.i]) - 0x30
         self.i += 1
         if self.c1 > 0x9:
@@ -260,7 +260,7 @@ class Decoder(object):
         self.state = c.STATE_URLENCODE_2
 
     def state_readlen(self):
-        log.debug('state_readlen')
+        # log.debug('state_readlen')
         self.len_buf += self.in_buf[self.i]
         self.i += 1
         self.ml -= 1
@@ -274,7 +274,7 @@ class Decoder(object):
             self.nextstate = c.STATE_DECODE
 
     def state_checksum(self):
-        log.debug('state_checksum')
+        # log.debug('state_checksum')
         self.csbuf += self.in_buf[self.i]
         self.i += 1
         self.ml -= 1
@@ -316,7 +316,7 @@ class Decoder(object):
         self.state = c.STATE_DECODE
 
     def state_dbcs(self):
-        log.debug('state_dbcs')
+        # log.debug('state_dbcs')
         self.out_buf += self.in_buf[self.i]
         self.j += 1
         self.i += 1
@@ -353,19 +353,19 @@ class Decoder(object):
         self.len -= 1
 
     def state_init_readlen(self):
-        log.debug('state_init_readlen')
+        # log.debug('state_init_readlen')
         self.ml = 6
         self.state = c.STATE_READLEN
 
     def state_skip_ml(self):
-        log.debug('state_skip_ml')
+        # log.debug('state_skip_ml')
         self.i += 1
         self.ml -= 1
         if not self.ml:
             self.state = self.nextstate
 
     def state_flushing(self):
-        log.debug('state_flushing')
+        # log.debug('state_flushing')
         self.out_buf += c.MARKER[self.k]
         self.j += 1
         self.k += 1
@@ -374,7 +374,7 @@ class Decoder(object):
             self.state = c.STATE_COPY_INPUT
 
     def state_copy_input(self):
-        log.debug('state_copy_input')
+        # log.debug('state_copy_input')
         if self.in_buf[self.i] == c.MARKER[self.m]:
             self.i += 1
             self.m += 1
@@ -390,7 +390,7 @@ class Decoder(object):
             self.state = c.STATE_INIT_READLEN
 
     def state_wait_for_open(self):
-        log.debug('state_wait_for_open')
+        # log.debug('state_wait_for_open')
         if self.in_buf[self.i] == '<':
             self.state = c.STATE_INIT_COPY
         self.out_buf += self.in_buf[self.i]
@@ -398,7 +398,7 @@ class Decoder(object):
         self.i += 1
 
     def state_wait_for_close(self):
-        log.debug('state_wait_for_close')
+        # log.debug('state_wait_for_close')
         if self.in_buf[self.i] == '>':
             self.state = c.STATE_WAIT_FOR_OPEN
         self.out_buf += self.in_buf[self.i]
@@ -406,7 +406,7 @@ class Decoder(object):
         self.i += 1
 
     def state_init_copy(self):
-        log.debug('state_init_copy')
+        # log.debug('state_init_copy')
         self.ml = len(c.MARKER)
         self.m = 0
         self.state = c.STATE_COPY_INPUT
