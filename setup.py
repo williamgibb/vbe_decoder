@@ -4,9 +4,10 @@ try:
     import pypandoc
     long_description = pypandoc.convert('README.md', 'rst')
 except ImportError:
-    long_description = open('README.md').read()
-except FileNotFoundError:
-    long_description = 'README.md not found.'
+    try:
+        long_description = open('README.md').read()
+    except FileNotFoundError:
+        long_description = 'README.md not found.'
 
 version = __import__('vbe_decoder').__version__
 
