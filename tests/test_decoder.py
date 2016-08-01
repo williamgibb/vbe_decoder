@@ -62,3 +62,10 @@ class TestDecoder(unittest.TestCase):
         log.info('Running test with bad input')
         with self.assertRaises(vbe_decoder.DecodeError):
             self.decoder.decode(buf=1234)
+
+    def test_dumb_decoder(self):
+        self.decoder = vbe_decoder.Decoder(dumb=True)
+        log.info('Running contrato test')
+        infp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware')
+        opfp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware.decoded')
+        self.run_decoder(input_buf_fp=infp, expected_buf_fp=opfp)
