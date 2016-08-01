@@ -132,7 +132,15 @@ class Decoder(object):
         """
         if not isinstance(buf, str):
             log.debug('Decoding buf')
-            buf = buf.decode()
+            try:
+                buf = buf.decode()
+            except AttributeError as e:
+                log.exception('Bad input encountered.')
+                if "has no attribute 'decode'" in str(e):
+                    msg = 'Input object {} does not support decoding.'.format(type(buf))
+                    raise exc.DecodeError(msg)
+                log.exception('Unknown AttributeError encountered')
+                raise
         self.reset()
         self.buf = buf
         while self.state:
