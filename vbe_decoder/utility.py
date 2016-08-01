@@ -117,7 +117,7 @@ def is_lead_byte(codepage, byte):
     if codepage in [949, 950]:
         if 0x80 < byte < 0xff:
             ret = 1
-    if codepage == 13961:
+    if codepage == 1361:
         if 0x83 < byte < 0xd4:
             ret = 1
         elif 0xd8 < byte < 0xdf:

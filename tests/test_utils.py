@@ -183,5 +183,84 @@ class TestFunctions(unittest.TestCase):
             r = utils.decode_base64(chars = k, digits=self.digits)
             self.assertEqual(r, e)
 
+class TestLeadByte(unittest.TestCase):
+    def run_list(self, cp, input_results):
+        for (byte, e) in input_results:
+            r = utils.is_lead_byte(codepage=cp, byte=byte)
+            log.debug('codepage {} - 0x{:x} - expected {} - got {}'.format(cp, byte, e, r))
+            self.assertEqual(r, e)
+
+    def test_no_codepage(self):
+        r = utils.is_lead_byte(codepage=0, byte=0x00)
+        self.assertEqual(r, 0)
+
+    def test_japan_codepage(self):
+        cp = 932
+        input_results = [(0x00, 0),
+                         (0x79, 0),
+                         (0x80, 0),
+                         (0x81, 1),
+                         (0x9f, 1),
+                         (0xa0, 0),
+                         (0xde, 0),
+                         (0xdf, 0),
+                         (0xe0, 1),
+                         (0xfc, 1),
+                         (0xfd, 0),
+                         (0xff, 0)
+                         ]
+        self.run_list(cp=cp, input_results=input_results)
+
+    def test_chinese_simple_codepage(self):
+        cp = 936
+        input_results = [(0x00, 0),
+                         (0xa0, 0),
+                         (0xa1, 1),
+                         (0xfd, 1),
+                         (0xfe, 1),
+                         (0xff, 0),
+                         ]
+        self.run_list(cp=cp, input_results=input_results)
+
+    def test_korean_wangsung_codepage(self):
+        cp = 949
+        input_results = [(0x00, 0),
+                         (0x80, 0),
+                         (0x81, 1),
+                         (0xfd, 1),
+                         (0xfe, 1),
+                         (0xff, 0),
+                         ]
+        self.run_list(cp=cp, input_results=input_results)
+
+    def test_chinese_big_codepage(self):
+        cp = 950
+        input_results = [(0x00, 0),
+                         (0x80, 0),
+                         (0x81, 1),
+                         (0xfd, 1),
+                         (0xfe, 1),
+                         (0xff, 0),
+                         ]
+        self.run_list(cp=cp, input_results=input_results)
+
+    def test_korean_codepage(self):
+        cp = 1361
+        input_results = [(0x00, 0),
+                         (0x83, 0),
+                         (0x84, 1),
+                         (0xd3, 1),
+                         (0xd4, 0),
+                         (0xd8, 0),
+                         (0xd9, 1),
+                         (0xde, 1),
+                         (0xdf, 0),
+                         (0xe0, 1),
+                         (0xf9, 1),
+                         (0xfa, 0),
+                         (0xff, 0),
+                         ]
+        self.run_list(cp=cp, input_results=input_results)
+
 if __name__ == '__main__':
     unittest.main()
