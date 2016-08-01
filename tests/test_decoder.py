@@ -63,9 +63,19 @@ class TestDecoder(unittest.TestCase):
         with self.assertRaises(vbe_decoder.DecodeError):
             self.decoder.decode(buf=1234)
 
+    def test_more_bad_input(self):
+        log.info('Running test with more bad input')
+        with self.assertRaises(vbe_decoder.DecodeError):
+            self.decoder.decode(buf={'foo':'bar'})
+
     def test_dumb_decoder(self):
         self.decoder = vbe_decoder.Decoder(dumb=True)
-        log.info('Running contrato test')
+        log.info('Running contrato test with dumb option')
         infp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware')
         opfp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware.decoded')
         self.run_decoder(input_buf_fp=infp, expected_buf_fp=opfp)
+
+    def test_bad_creation_options(self):
+        with self.assertRaises(vbe_decoder.DecodeError):
+            vbe_decoder.Decoder(url_encoded=True,
+                                html_encoded=True)
