@@ -294,6 +294,11 @@ class TestEscape(unittest.TestCase):
             r = utils.unescape(char=char)
             self.assertEqual(r, e)
 
+    def test_high_ord(self):
+        e = chr(0xff)
+        r = utils.unescape(char=e)
+        self.assertEqual(r, e)
+
 
 if __name__ == '__main__':
     unittest.main()
