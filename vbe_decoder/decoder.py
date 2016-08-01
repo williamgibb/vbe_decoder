@@ -240,7 +240,7 @@ class Decoder(object):
             self.c2 -= 0x7
         if self.c2 > 0x10:
             self.c2 -= 0x20
-        c2 = chr(self.c2 + (self.c << 4))
+        c2 = chr(self.c2 + (self.c1 << 4))
         # Copy the decoded character back into the input buffer
         self.in_buf = self.in_buf[:self.i] + c2 + self.in_buf[self.i + 1:]
         # avoid looping in case this was an %
