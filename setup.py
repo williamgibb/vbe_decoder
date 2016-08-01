@@ -6,7 +6,7 @@ try:
 except ImportError:
     try:
         long_description = open('README.md').read()
-    except FileNotFoundError:
+    except:
         long_description = 'README.md not found.'
 
 version = __import__('vbe_decoder').__version__
