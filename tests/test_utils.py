@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(mes
 log = logging.getLogger(__name__)
 
 
-class TestFunctions(unittest.TestCase):
+class TestDigits(unittest.TestCase):
     def setUp(self):
         self.digits = utils.make_digits()
 
@@ -156,6 +156,11 @@ class TestFunctions(unittest.TestCase):
         for k, v in e.items():
             self.assertEqual(r.get(k, 0), v)
 
+
+class TestBase64(unittest.TestCase):
+    def setUp(self):
+        self.digits = utils.make_digits()
+
     def test_b64_decode1(self):
         s = 'abcdef'
         e = 2031990633
@@ -182,6 +187,7 @@ class TestFunctions(unittest.TestCase):
             log.info('Input: {}'.format(k))
             r = utils.decode_base64(chars = k, digits=self.digits)
             self.assertEqual(r, e)
+
 
 class TestLeadByte(unittest.TestCase):
     def run_list(self, cp, input_results):
