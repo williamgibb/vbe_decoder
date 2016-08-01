@@ -17,6 +17,7 @@ import unittest
 # Third Party code
 # Custom Code
 import vbe_decoder.utility as utils
+import vbe_decoder.constants as constants
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s [%(filename)s:%(funcName)s]')
 log = logging.getLogger(__name__)
@@ -267,6 +268,23 @@ class TestLeadByte(unittest.TestCase):
                          (0xff, 0),
                          ]
         self.run_list(cp=cp, input_results=input_results)
+
+
+class TestMnemonic(unittest.TestCase):
+    def test_null(self):
+        r = utils.decode_mnemonic(mnemonic=None)
+        self.assertEqual(r, '\x00')
+
+    def test_duck(self):
+        r = utils.decode_mnemonic(mnemonic='duck')
+        self.assertEqual(r, '?')
+
+    def test_defined_values(self):
+        for k, v in constants.ENTITY_MAP.items():
+            e = chr(v)
+            r = utils.decode_mnemonic(mnemonic=k)
+            self.assertEqual(r, e)
+
 
 if __name__ == '__main__':
     unittest.main()
