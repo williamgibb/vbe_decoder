@@ -58,6 +58,12 @@ class TestDecoder(unittest.TestCase):
         opfp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware.decoded')
         self.run_decoder(input_buf_fp=infp, expected_buf_fp=opfp)
 
+    def test_houdini(self):
+        log.info('Running houdini test')
+        infp = os.path.join(ASSETS_PATH, 'GLsRBXbT.vbe.malware')
+        opfp = os.path.join(ASSETS_PATH, 'GLsRBXbT.vbe.malware.decoded')
+        self.run_decoder(input_buf_fp=infp, expected_buf_fp=opfp)
+
     def test_class_resuse(self):
         log.info('Running contrato test with class reuse / reset()')
         infp = os.path.join(ASSETS_PATH, 'contrato.vbe.malware')
