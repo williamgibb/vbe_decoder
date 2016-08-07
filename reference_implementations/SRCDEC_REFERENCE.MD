@@ -80,7 +80,7 @@ As you can see, the ```<script language="...">``` has been changed into "JScript
 | --------- |------- |
 | Hoi | #@~^FQAAAA==@#@&CGb@#@&zz O@*@#@&WwIAAA==^#~@ |
 | Hai | #@~^FQAAAA==@#@&CCb@#@&zz O@*@#@&TQIAAA==^#~@ |
-| HaiHai | #@~^IgAAAA==@#@&CCbCmk@#@&CmrCmk@#@&JzRR@*@#@&mgUAAA==^#~@ |
+| HaiHai<br>HaiHai | #@~^IgAAAA==@#@&CCbCmk@#@&CmrCmk@#@&JzRR@*@#@&mgUAAA==^#~@ |
 
 Cute. As you can see, @#@& appears to be a newline (@# = CR, @& = LF), and the position of a character does (sometimes...) matter (the first time HaiHai becomes CCbCmk and the second time it's CmrCmk). Let's just encode a line with a lot of A's:
 
