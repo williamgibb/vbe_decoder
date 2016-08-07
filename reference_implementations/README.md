@@ -1,0 +1,1 @@
+Various Reference implementations found on the internet.  B/c background research and such stuff.
